@@ -6,7 +6,7 @@
 >
 > **Grupo 3:** Nancy Camacho Santo y Karol Ivonne Castro Hernández.  
 >
-> **Artículo base:** P. B. Denton and R. Pestes, [*"Neutrino oscillations through the Earth's core"*](https://doi.org/10.1103/PhysRevD.104.113007), Phys. Rev. D 104 (2021) 113007.
+> **Artículo base:** P. B. Denton and R. Pestes, [*Neutrino oscillations through the Earth's core*](https://doi.org/10.1103/PhysRevD.104.113007), Phys. Rev. D 104 (2021) 113007.
 
 ---
 

@@ -1,9 +1,13 @@
 # Oscilaciones de Neutrinos en la Tierra
+
 ### Adaptación didáctica de la Figura 5 — Denton & Pestes (2021)
 
 > **Contexto académico:** Primer parcial — Física de Neutrinos.
+>
 > **Grupo 3:** Nancy Camacho Santo y Karol Ivonne Castro Hernández.  
+>
 > **Artículo base:** P. B. Denton and R. Pestes, [*"Neutrino oscillations through the Earth's core"*](https://doi.org/10.1103/PhysRevD.104.113007), Phys. Rev. D 104 (2021) 113007.
+
 ---
 
 ## ¿Qué hace este proyecto?
@@ -87,7 +91,8 @@ donde $x(\theta_{z})=2R\oplus |\cos{\theta_{z}}|$ ($x=2R\oplus$ diámetro comple
 ### Dependecias
 
 >numpy>=1.24
-matplotlib>=3.7
+>
+>matplotlib>=3.7
 
 ### 1. Clonar el repositorio.
 
@@ -105,8 +110,10 @@ cd Articulo_neutrino_tierra
 **Opción B:** desde terminal:
 
 >Windows (PowerShell) Ctrl + ñ
-python -m venv .venv
-.venv\Scripts\Activate.ps1
+>
+>python -m venv .venv
+>
+>.venv\Scripts\Activate.ps1
 
 ### 3. Instalar dependencias.
 

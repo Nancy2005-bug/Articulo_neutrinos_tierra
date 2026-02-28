@@ -26,12 +26,11 @@ def parametros_efectivos(A_CC: float) -> tuple[float, float]:
     """
     Calcula Δm²_M y sin(2θ_M) en materia de densidad constante.
     Ecuaciones (4) y (5) del PDF de instrucciones.
-
     Retorna (Dm2_M, sin2thetaM)
     """
     sin2t = np.sin(2 * theta12)
     cos2t = np.cos(2 * theta12)
-
+    
     Dm2_M   = np.sqrt((Dm2_21 * cos2t - A_CC)**2
                       + (Dm2_21 * sin2t)**2)
     sin2t_M = (Dm2_21 * sin2t) / Dm2_M

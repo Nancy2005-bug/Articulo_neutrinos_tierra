@@ -31,7 +31,7 @@ CAPAS = [
     ("outer_mantle",  "Outer Mantle",    3.5,          0.49,  "#b7e4a0"),
     ("lower_mantle",  "Lower Mantle",    5.0,          0.49,  "#fde68a"),
     ("outer_core",    "Outer Core",     11.0,          0.47,  "#fca5a5"),
-    ("inner_core",    "Inner Core",     13.0,          0.47,  "#c4b5fd"),
+    ("inner_core",    "Inner Core",     13.0,          0.47,  "#A9D1EB"),
 ]
 
 # ── Barrido angular ──────────────────────────────────────────────────

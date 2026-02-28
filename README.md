@@ -17,15 +17,7 @@ Este código reproduce una adaptación didáctica de la Figura 5 del artículo d
 La adaptación simplifica el modelo original (3 sabores, PREM completo) a:
 
 - **2 sabores** ($\nu_{w}$, $\nu_{\mu}$) con efecto de materia a densidad constante.
-- **4 "Tierras" homogéneas**, cada una con la densidad promedio de una capa del modelo PREM:
-
-
-  | Capa | ρ (g/cm³) | Ye |
-  |---|---|---|
-  | Outer Mantle | 3.5 | 0.49 |
-  | Lower Mantle | 5.0 | 0.49 |
-  | Outer Core | 11.0 | 0.47 |
-  | Inner Core | 13.0 | 0.47 |
+- **4 "Tierras" homogéneas**, cada una con la densidad promedio de una capa del modelo PREM (Ver sección `Densidad de electrones`).
 
 Para cada "Tierra" se calculan y grafican:
 - La probabilidad de supervivencia $P(\nu_{e}\rightarrow \nu_{e})$.
@@ -35,16 +27,50 @@ en función del ángulo cenital $\theta_{z} \in [90\degree, 180\degree]$ (neutri
 
 ---
 
+## Densidad de electrones Nₑ — Fuente y procedimiento
+
+### (i) Fuente utilizada
+
+**Tabla II** de:
+> A. M. Dziewonski & D. L. Anderson,
+> *"Preliminary Reference Earth Model"*,
+> Phys. Earth Planet. Inter. 25 (1981) 297–356.
+
+Los valores de $Y_e = Z/A$ (fracción de electrones por nucleón) provienen de:
+> **Tabla 1** de [arXiv:2207.11257](https://arxiv.org/abs/2207.11257)
+> — silicatos (manto): Ye = 0.4954; Fe-Ni (núcleo): Ye = 0.4691 ≈ 0.47.
+
+### (ii) Procedimiento de promedio
+
+Para cada capa se calculó el promedio ponderado por volumen de capa esférica sobre todos los niveles de la Tabla II del PREM:
+
+$$\bar{\rho} = \frac{\displaystyle\sum_i \bar{\rho}_i \,\Delta V_i}{\displaystyle\sum_i \Delta V_i}, \qquad \Delta V_i = \tfrac{4}{3}\pi\left(r_{i+1}^3 - r_i^3\right)$$
+
+donde $\bar{\rho}_i = (\rho_i + \rho_{i+1})/2$ es la densidad media en cada subcapa y los $r_i$ son los radios de la Tabla II.
+
+### (iii) Valores finales adoptados
+
+| Capa | Rango radial | ρ (PREM promedio) | Ye | Nₑ (cm⁻³) |
+|---|---|---|---|---|
+| Outer Mantle | 5701 – 6347 km | **3.621 g/cm³** | 0.49 | 1.07 × 10²⁴ |
+| Lower Mantle | 3480 – 5701 km | **4.908 g/cm³** | 0.49 | 1.45 × 10²⁴ |
+| Outer Core   | 1221.5 – 3480 km | **10.900 g/cm³** | 0.47 | 3.09 × 10²⁴ |
+| Inner Core   | 0 – 1221.5 km | **12.893 g/cm³** | 0.47 | 3.65 × 10²⁴ |
+
+donde Nₑ = Ye · ρ · Nₐ se calcula internamente en `src/parametros.py` a través del potencial de materia:
+
+---
+
 ## Física del modelo
 
 ### Parámetros de oscilación
 Tomados de [NuFIT 6.1 (2025)](http://www.nu-fit.org/?q=node/309), Ordenamiento Normal:
 
-| Parámetro | Valor |
-|---|---|
-| $\Delta m_{21}^2$ | $7.537 \times 10^{-5} eV^2$ |
-| $\theta_{12}$ | $33.76\degree$ |
-| $E_{\nu}$ | 250 MeV |
+| Parámetro | Valor | Fuente |
+|---|---|---|
+| $\Delta m_{21}^2$ | $7.537 \times 10^{-5} eV^2$ |NuFIT 6.1 NO, best-fit |
+| $\theta_{12}$ | $33.76\degree$ |NuFIT 6.1 NO, best-fit |
+| $E_{\nu}$ | 250 MeV |Igual que Fig. 5 del artículo |
 
 Se usan los parámetros solares ($\Delta m_{21}^2$, $\theta_{12}$) porque a 250 MeV la longitud de oscilación ($\sim 8230$ km) es comparable al diámetro de la Tierra.
 
@@ -147,8 +173,7 @@ Las figuras se guardan automáticamente en `figuras/`:
 
 ## Limitaciones del Modelo
 
-Este modelo es una simplificación didáctica. Las diferencias con la Fig. 5
-original del paper son:
+Este modelo es una simplificación didáctica. Las diferencias con la Fig. 5 original del paper son:
 
 1. 2 sabores vs 3 sabores: el paper usa el esquema completo PMNS.
 

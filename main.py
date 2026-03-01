@@ -199,7 +199,7 @@ def run_tests():
         for e in errores:
             print(f"     {e}")
     else:
-        print("  ✅ Todos los tests pasaron correctamente.")
+        print("  ✅ Todos los tests pasaron correctamente.")ñ
 
 
 if __name__ == "__main__":

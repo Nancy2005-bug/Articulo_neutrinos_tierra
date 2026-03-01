@@ -122,8 +122,86 @@ def graficar_todas_capas():
     plt.close()
     print(f"  ✅  Guardada → {ruta}")
 
+# ══════════════════════════════════════════════════════════════════════
+# TESTS — verificación física del modelo
+# Ejecutar: python main.py  (los tests corren al final automáticamente)
+# ══════════════════════════════════════════════════════════════════════
 
-# ── Ejecución ────────────────────────────────────────────────────────
+def run_tests():
+    import numpy as np
+    from src.parametros      import Dm2_21, theta12, E_eV, E_GeV, R_TIERRA_KM, CAPAS
+    from src.materia         import calcular_A_CC, parametros_efectivos   # ← corregido
+    from src.geometria       import distancia_km
+    from src.probabilidades  import calcular_probabilidades
+
+    errores = []
+
+    # ── TEST 1: Unitariedad ───────────────────────────────────────────
+    cos_tz = np.linspace(-1.0, -0.001, 1000)
+    for capa in CAPAS:
+        P_emu, P_ee = calcular_probabilidades(cos_tz, capa["rho"], capa["Ye"])
+        suma = P_ee + P_emu
+        if not np.allclose(suma, 1.0, atol=1e-10):
+            errores.append(f"TEST 1 FALLO [{capa['nombre']}]: max error={np.max(np.abs(suma-1)):.2e}")
+        else:
+            print(f"  TEST 1 OK  [{capa['nombre']}]: P_ee + P_emu = 1 ✓")
+
+    # ── TEST 2: Límite vacío ──────────────────────────────────────────
+    A_test        = calcular_A_CC(rho_gcm3=0.0, Ye=0.0)
+    Dm2_vac, sin2_vac = parametros_efectivos(A_test)   # ← corregido
+    sin2_esperado = np.sin(2 * theta12)
+    if not np.isclose(Dm2_vac, Dm2_21, rtol=1e-6):
+        errores.append(f"TEST 2 FALLO: Δm²_M(vacío) = {Dm2_vac:.4e} != {Dm2_21:.4e}")
+    elif not np.isclose(sin2_vac, sin2_esperado, rtol=1e-6):
+        errores.append(f"TEST 2 FALLO: sin2θ_M(vacío) = {sin2_vac:.6f} != {sin2_esperado:.6f}")
+    else:
+        print(f"  TEST 2 OK  [vacío]: Δm²_M → Δm²₂₁, sin2θ_M → sin2θ₁₂ ✓")
+
+    # ── TEST 3: Geometría θz=90° ──────────────────────────────────────
+    x = distancia_km(np.array([0.0]))
+    if not np.isclose(x[0], 0.0, atol=1e-6):
+        errores.append(f"TEST 3 FALLO: x(cos=0) = {x[0]:.4f} km != 0")
+    else:
+        print(f"  TEST 3 OK  [θz=90°]: x = 0 km ✓")
+
+    # ── TEST 4: Geometría θz=180° ─────────────────────────────────────
+    x        = distancia_km(np.array([-1.0]))
+    esperado = 2.0 * R_TIERRA_KM
+    if not np.isclose(x[0], esperado, rtol=1e-6):
+        errores.append(f"TEST 4 FALLO: x(cos=-1) = {x[0]:.2f} km != {esperado:.2f} km")
+    else:
+        print(f"  TEST 4 OK  [θz=180°]: x = 2·R⊕ = {esperado:.1f} km ✓")
+
+    # ── TEST 5: Resonancia MSW ────────────────────────────────────────
+    cos2t         = np.cos(2 * theta12)
+    A_res         = Dm2_21 * cos2t
+    _, sin2tM_res = parametros_efectivos(A_res)        # ← corregido
+    if not np.isclose(sin2tM_res, 1.0, atol=1e-6):
+        errores.append(f"TEST 5 FALLO: sin2θ_M(resonancia) = {sin2tM_res:.6f} != 1")
+    else:
+        print(f"  TEST 5 OK  [resonancia MSW]: sin²(2θ_M) = 1 ✓")
+
+    # ── TEST 6: Rango físico ──────────────────────────────────────────
+    cos_tz = np.linspace(-1.0, -0.001, 5000)
+    for capa in CAPAS:
+        P_emu, P_ee = calcular_probabilidades(cos_tz, capa["rho"], capa["Ye"])
+        if np.any(P_ee < -1e-10) or np.any(P_ee > 1+1e-10):
+            errores.append(f"TEST 6 FALLO [{capa['nombre']}]: P_ee fuera de [0,1]")
+        elif np.any(P_emu < -1e-10) or np.any(P_emu > 1+1e-10):
+            errores.append(f"TEST 6 FALLO [{capa['nombre']}]: P_emu fuera de [0,1]")
+        else:
+            print(f"  TEST 6 OK  [{capa['nombre']}]: 0 ≤ P_ee, P_emu ≤ 1 ✓")
+
+    # ── Resumen ───────────────────────────────────────────────────────
+    print()
+    if errores:
+        print(f"  ❌ {len(errores)} test(s) fallaron:")
+        for e in errores:
+            print(f"     {e}")
+    else:
+        print("  ✅ Todos los tests pasaron correctamente.")
+
+
 if __name__ == "__main__":
     print("\n Generando figuras en carpeta figuras/ ...\n")
 
@@ -138,3 +216,9 @@ if __name__ == "__main__":
     for f in sorted(os.listdir(FIGURAS_DIR)):
         if f.endswith(".png"):
             print(f"   figuras/{f}")
+
+    # ── Tests ─────────────────────────────────────────────────────────
+    print("\n" + "═"*60)
+    print("  VERIFICACIÓN FÍSICA — 6 TESTS")
+    print("═"*60)
+    run_tests()

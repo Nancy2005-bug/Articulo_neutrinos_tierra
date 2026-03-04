@@ -28,9 +28,9 @@ os.makedirs(FIGURAS_DIR, exist_ok=True)
 # ── 4 "Tierras" homogéneas — densidades promedio PREM ───────────────
 CAPAS = [
     # (nombre_corto,   nombre_largo,     rho [g/cm³],  Ye,    color_fondo)
-    ("outer_mantle",  "Outer Mantle",    3.5,          0.49,  "#b7e4a0"),
-    ("lower_mantle",  "Lower Mantle",    5.0,          0.49,  "#fde68a"),
-    ("outer_core",    "Outer Core",     11.0,          0.47,  "#fca5a5"),
+    ("outer_mantle",  "Outer Mantle",    3.5,          0.49,  "#fca5a5"),
+    ("lower_mantle",  "Lower Mantle",    5.0,          0.49,  "#b7e4a0"),
+    ("outer_core",    "Outer Core",     11.0,          0.47,  "#fde68a"),
     ("inner_core",    "Inner Core",     13.0,          0.47,  "#A9D1EB"),
 ]
 
